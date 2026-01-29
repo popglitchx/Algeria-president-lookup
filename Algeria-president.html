@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>من كان رئيس الجزائر؟</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #e6f4ea;
+      direction: rtl;
+      text-align: center;
+      padding: 50px;
+      color: #333;
+    }
+
+    .container {
+      background-color: #ffffff;
+      max-width: 700px;
+      margin: auto;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #2e7d32;
+      margin-bottom: 20px;
+    }
+
+    input[type="number"] {
+      padding: 12px;
+      width: 70%;
+      font-size: 16px;
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input[type="number"]:focus {
+      border-color: #66bb6a;
+    }
+
+    button {
+      padding: 12px 20px;
+      background-color: #66bb6a;
+      color: white;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 15px;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #388e3c;
+    }
+
+    #result {
+      margin-top: 25px;
+      font-size: 18px;
+      color: #2e7d32;
+      font-weight: bold;
+    }
+
+    #presidentInfo {
+      display: flex;
+      align-items: flex-start;
+      text-align: right;
+      margin-top: 30px;
+      gap: 20px;
+      direction: rtl;
+      justify-content: start;
+    }
+
+    #presidentInfo img {
+      width: 130px;
+      height: auto;
+      border-radius: 15px;
+      border: 3px solid #66bb6a;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .info-text {
+      color: #388e3c;
+      font-size: 16px;
+      line-height: 1.8;
+      font-weight: bold;
+    }
+
+    footer {
+      margin-top: 40px;
+      color: #888;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>من كان رئيس الجزائر؟</h1>
+    <p>أدخل السنة لمعرفة من كان الرئيس:</p>
+
+    <input type="number" id="yearInput" placeholder="مثال: 2005">
+    <br>
+    <button onclick="findPresident()">اعرف الرئيس</button>
+
+    <div id="result"></div>
+    <div id="presidentInfo"></div>
+  </div>
+
+  <footer>
+    الصفحة مصممة من طرف ريشاشوة عبد الرحمان ©
+  </footer>
+
+  <script>
+    const presidentsData = [
+      {
+        name: "أحمد بن بلة",
+        start: 1962,
+        end: 1965,
+        birth: 1916,
+        death: 2012,
+        info: "أول رئيس للجزائر بعد الاستقلال، من أبرز قادة الثورة.",
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Ahmed_Ben_Bella_aux_USA%2C_oct.1962_%28cropped%29.jpg/330px-Ahmed_Ben_Bella_aux_USA%2C_oct.1962_%28cropped%29.jpg",
+        inPower: false
+      },
+      {
+        name: "هواري بومدين",
+        start: 1965,
+        end: 1978,
+        birth: 1932,
+        death: 1978,
+        info: "رئيس ذو طابع اشتراكي، قاد الجزائر نحو التصنيع.",
+        image: "https://upload.wikimedia.org/wikipedia/commons/3/3b/Houari_Boumediene%27s_Portrait.jpg",
+        inPower: false
+      },
+      {
+        name: "الشاذلي بن جديد",
+        start: 1979,
+        end: 1992,
+        birth: 1929,
+        death: 2012,
+        info: "قاد إصلاحات اقتصادية وفتح المجال للتعددية الحزبية.",
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Chadli.jpg/220px-Chadli.jpg",
+        inPower: false
+      },
+      {
+        name: "محمد بوضياف / علي كافي",
+        start: 1992,
+        end: 1994,
+        birth: 1919,
+        death: 1992,
+        info: "بوضياف عاد من المنفى ثم اغتيل، خلفه علي كافي كرئيس مؤقت.",
+        image: "https://upload.wikimedia.org/wikipedia/ar/thumb/5/52/Mohamed_Boudiaf4.png/220px-Mohamed_Boudiaf4.png",
+        inPower: false
+      },
+      {
+        name: "اليمين زروال",
+        start: 1994,
+        end: 1999,
+        birth: 1941,
+        death: null,
+        info: "قاد البلاد خلال فترة صعبة من العشرية السوداء.",
+        image: "https://upload.wikimedia.org/wikipedia/ar/thumb/7/72/Zeroual231.png/220px-Zeroual231.png",
+        inPower: false
+      },
+      {
+        name: "عبد العزيز بوتفليقة",
+        start: 1999,
+        end: 2019,
+        birth: 1937,
+        death: 2021,
+        info: "أطول فترة حكم، شهدت استقرارًا وتنمية، لكنه استقال بعد حراك 2019.",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIcDxZMFwuAshudwpLKvRzR5HMQDXeQdqhew&s",
+        inPower: false
+      },
+      {
+        name: "عبد القادر بن صالح",
+        start: 2019,
+        end: 2019,
+        birth: 1941,
+        death: 2021,
+        info: "رئيس مؤقت بعد استقالة بوتفليقة.",
+        image: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/Abdelkader_Bensalah_18th_Summit_of_Non-Aligned_Movement_in_Baku_%28cropped%29.jpg/220px-Abdelkader_Bensalah_18th_Summit_of_Non-Aligned_Movement_in_Baku_%28cropped%29.jpg",
+        inPower: false
+      },
+      {
+        name: "عبد المجيد تبون",
+        start: 2019,
+        end: 2025,
+        birth: 1945,
+        death: null,
+        info: "الرئيس الحالي، انتُخب بعد الحراك الشعبي سنة 2019.",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyZOq656gwygImlc6mjmfeztVDNfozjTrEgg&s",
+        inPower: true
+      }
+    ];
+
+    function findPresident() {
+      const year = parseInt(document.getElementById("yearInput").value);
+      const resultDiv = document.getElementById("result");
+      const infoDiv = document.getElementById("presidentInfo");
+      infoDiv.innerHTML = "";
+      resultDiv.innerHTML = "";
+
+      if (isNaN(year)) {
+        resultDiv.textContent = "من فضلك أدخل سنة صالحة.";
+        return;
+      }
+
+      const president = presidentsData.find(p => year >= p.start && year <= p.end);
+
+      if (president) {
+        resultDiv.textContent = `الرئيس في سنة ${year} هو: ${president.name}`;
+        infoDiv.innerHTML = `
+          <img src="${president.image}" alt="${president.name}">
+          <div class="info-text">
+            الاسم: ${president.name}<br>
+            سنة الميلاد: ${president.birth || "غير متوفرة"}<br>
+            تولى الحكم من: ${president.start} إلى ${president.end}<br>
+            سنة الوفاة: ${president.death ? president.death : "لا يزال حيًّا"}<br>
+            <br>${president.info}
+          </div>
+        `;
+      } else {
+        resultDiv.textContent = "لا توجد معلومات عن الرئيس في هذه السنة.";
+      }
+    }
+  </script>
+
+</body>
+</html>
